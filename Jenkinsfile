@@ -1,60 +1,39 @@
 pipeline {
 
-```
-agent {
-    label 'dynamic-agent'
-}
-
-stages {
-
-    stage('Checkout') {
-        steps {
-            checkout scm
-        }
+    agent {
+        label 'dynamic-agent'
     }
 
-    stage('Terraform Init') {
-        steps {
-            sh 'terraform init'
-        }
-    }
+    stages {
 
-    stage('Terraform Validate') {
-        steps {
-            sh 'terraform validate'
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
         }
-    }
 
-    stage('Check AWS Identity') {
-        steps {
-            sh 'aws sts get-caller-identity'
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
         }
-    }
 
-    stage('Terraform Plan') {
-        steps {
-            sh 'terraform plan'
+        stage('Terraform Validate') {
+            steps {
+                sh 'terraform validate'
+            }
         }
-    }
 
-    stage('Terraform Apply') {
-        steps {
-            input 'Approve Terraform Apply?'
-            sh 'terraform apply -auto-approve'
+        stage('Check AWS Identity') {
+            steps {
+                sh 'aws sts get-caller-identity'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
         }
     }
 }
-
-post {
-    success {
-        echo 'Pipeline completed successfully'
-    }
-
-    failure {
-        echo 'Pipeline failed'
-    }
-}
-```
-
-}
-
