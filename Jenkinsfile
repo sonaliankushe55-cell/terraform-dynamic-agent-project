@@ -12,34 +12,21 @@ pipeline {
             }
         }
 
-        stage('Run Hello') {
+        stage('Terraform Init') {
             steps {
-                sh 'chmod +x app/hello.sh'
-                sh './app/hello.sh'
+                sh 'terraform init'
             }
         }
 
-        stage('Terraform Init') {
+        stage('Terraform Validate') {
             steps {
-                dir('terraform') {
-                    sh 'terraform init'
-                }
+                sh 'terraform validate'
             }
         }
 
         stage('Terraform Plan') {
             steps {
-                dir('terraform') {
-                    sh 'terraform plan'
-                }
-            }
-        }
-
-        stage('Terraform Apply') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform apply -auto-approve'
-                }
+                sh 'terraform plan'
             }
         }
     }
